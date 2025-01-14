@@ -1,101 +1,107 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+import { useState } from 'react'
+import { CollapsibleCategory } from '@/components/collapsible-category'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { FileText, Clock, Shuffle, Code, Image, FileCode, Video, Palette, Key, Ruler, Network, FileIcon as FileInvoice, Smile, User, Type, Zap, Table, FileArchive, Briefcase, PenTool, Wrench, DollarSign, Gamepad2, GraduationCap, PlusCircle } from 'lucide-react'
+
+const categories = [
+  {
+    name: 'Productivity',
+    icon: Briefcase,
+    apps: [
+      { name: 'Resume Generator', href: '/resume-generator', isReady: true, icon: FileText, description: 'Create professional resumes quickly' },
+      { name: 'Time Zone Converter', href: '/time-zone-converter', isReady: false, icon: Clock, description: 'Convert times across different time zones' },
+      { name: 'Random Decision Maker', href: '/decision-maker', isReady: false, icon: Shuffle, description: 'Get help making random decisions' },
+      { name: 'HTML Previewer', href: '/html-previewer', isReady: false, icon: Code, description: 'Preview HTML code in real-time' },
+    ],
+  },
+  {
+    name: 'Content Creation',
+    icon: PenTool,
+    apps: [
+      { name: 'Image Compressor', href: '/image-compressor', isReady: false, icon: Image, description: 'Compress images without losing quality' },
+      { name: 'Markdown to HTML Converter', href: '/markdown-to-html', isReady: false, icon: FileCode, description: 'Convert Markdown to HTML easily' },
+      { name: 'Video-to-GIF Converter', href: '/video-to-gif', isReady: false, icon: Video, description: 'Convert video clips to GIF format' },
+    ],
+  },
+  {
+    name: 'Developer Tools',
+    icon: Wrench,
+    apps: [
+      { name: 'CSS Gradient Generator', href: '/css-gradient', isReady: false, icon: Palette, description: 'Create beautiful CSS gradients' },
+      { name: 'Password Generator', href: '/password-generator', isReady: true, icon: Key, description: 'Generate secure passwords' },
+      { name: 'Unit Converter for Developers', href: '/unit-converter', isReady: false, icon: Ruler, description: 'Convert between different units' },
+      { name: 'API Tester', href: '/api-tester', isReady: false, icon: Network, description: 'Test API endpoints easily' },
+    ],
+  },
+  {
+    name: 'Financial Tools',
+    icon: DollarSign,
+    apps: [
+      { name: 'Invoice Generator', href: '/invoice-generator', isReady: false, icon: FileInvoice, description: 'Create professional invoices' },
+    ],
+  },
+  {
+    name: 'Fun and Entertainment',
+    icon: Gamepad2,
+    apps: [
+      { name: 'Meme Generator', href: '/meme-generator', isReady: false, icon: Smile, description: 'Create funny memes easily' },
+      { name: 'Random Name Generator', href: '/name-generator', isReady: false, icon: User, description: 'Generate random names for characters' },
+      { name: 'ASCII Art Generator', href: '/ascii-art', isReady: false, icon: Type, description: 'Convert images to ASCII art' },
+      { name: 'Horoscope Generator', href: '/horoscope', isReady: false, icon: Zap, description: 'Get your daily horoscope' },
+    ],
+  },
+  {
+    name: 'Educational',
+    icon: GraduationCap,
+    apps: [
+      { name: 'Typing Speed Test', href: '/typing-test', isReady: false, icon: Type, description: 'Test and improve your typing speed' },
+      { name: 'Periodic Table Explorer', href: '/periodic-table', isReady: false, icon: Table, description: 'Explore the periodic table interactively' },
+    ],
+  },
+  {
+    name: 'Utility',
+    icon: PenTool,
+    apps: [
+      { name: 'ZIP Extractor (Virus Checker)', href: '/zip-extractor', isReady: false, icon: FileArchive, description: 'Extract and check ZIP files for viruses' },
+    ],
+  },
+]
+
+export default function Dashboard() {
+  const [searchTerm, setSearchTerm] = useState('')
+
+  const filteredCategories = categories.map(category => ({
+    ...category,
+    apps: category.apps.filter(app =>
+      app.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      app.description.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  })).filter(category => category.apps.length > 0)
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
+    <div className="space-y-8 bg-gradient min-h-screen p-8">
+      <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm p-4 rounded-lg shadow-md">
+        <Input
+          type="search"
+          placeholder="Search for tools or features..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full max-w-md mx-auto border-2 border-primary/20 focus:border-primary transition-colors duration-200"
         />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
+      {filteredCategories.map((category, index) => (
+        <CollapsibleCategory key={category.name} {...category} />
+      ))}
+      <div className="fixed bottom-4 right-4">
+        <Button variant="default" size="lg" className="rounded-full shadow-lg hover:shadow-xl transition-shadow duration-200">
+          <PlusCircle className="mr-2 h-4 w-4" />
+          Suggest a Tool
+        </Button>
+      </div>
     </div>
-  );
+  )
 }
+
