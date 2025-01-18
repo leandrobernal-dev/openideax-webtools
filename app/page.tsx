@@ -1,5 +1,7 @@
 "use client";
 
+export const runtime = "edge";
+
 import { useState } from "react";
 import { CollapsibleCategory } from "@/components/collapsible-category";
 import { Input } from "@/components/ui/input";
